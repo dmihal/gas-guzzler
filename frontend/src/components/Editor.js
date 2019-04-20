@@ -49,6 +49,7 @@ class Editor extends Component {
         name="editor_div"
         defaultValue={SOLIDITY_TEMPLATE}
         editorProps={{$blockScrolling: true}}
+        onChange={this.props.onChange}
         ref={this.editor}
       />
     );
