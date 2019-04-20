@@ -8,13 +8,17 @@ const SOLIDITY_TEMPLATE = `pragma solidity ^0.4.25;
 
 contract TestContract {
     // Write your test code in this function:
-    main() {
+    function main() public {
         // Your code here
     }
 }
 `
 
 class Editor extends Component {
+  state = {
+    code: SOLIDITY_TEMPLATE,
+  };
+
   constructor(props) {
     super(props);
     this.editor = React.createRef();
@@ -39,6 +43,8 @@ class Editor extends Component {
         e.preventDefault();
       }
     });
+
+    this.props.onChange(SOLIDITY_TEMPLATE);
   }
 
   render() {
@@ -47,13 +53,20 @@ class Editor extends Component {
         mode="solidity"
         theme="monokai"
         name="editor_div"
-        defaultValue={SOLIDITY_TEMPLATE}
+        value={this.state.code}
         editorProps={{$blockScrolling: true}}
-        onChange={this.props.onChange}
+        onChange={code => {
+          this.setState({ code });
+          this.props.onChange(code);
+        }}
         ref={this.editor}
       />
     );
   }
 }
+
+Editor.defaultProps = {
+  onChange: () => null,
+};
 
 export default Editor;
