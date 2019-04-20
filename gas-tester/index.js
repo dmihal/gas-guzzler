@@ -1,4 +1,5 @@
 const wrapper = require('solc/wrapper');
+const VM = require('ethereumjs-vm');
 
 const getInput = content => JSON.stringify({
   language: 'Solidity',
@@ -19,10 +20,24 @@ const getInput = content => JSON.stringify({
   }
 })
 
-
 class GasTester {
   constructor(solcModule) {
     this.solc = wrapper(solcModule);
+    this.vm = new VM()
+  }
+
+  runTest(bytecode) {
+    return new Promise((resolve, reject) => {
+      const result = this.vm.runCode({
+        code: Buffer.from(bytecode, 'hex'),
+        gasLimit: Buffer.from('ffffffff', 'hex'),
+      }, (err, result) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(result);
+      });      
+    })
   }
 
   compile(code) {
