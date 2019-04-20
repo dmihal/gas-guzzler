@@ -43,8 +43,6 @@ class Editor extends Component {
         e.preventDefault();
       }
     });
-
-    this.props.onChange(SOLIDITY_TEMPLATE);
   }
 
   render() {
@@ -57,7 +55,8 @@ class Editor extends Component {
         editorProps={{$blockScrolling: true}}
         onChange={code => {
           this.setState({ code });
-          this.props.onChange(code);
+          const codeSegment = code.split("\n").slice(5,-3).join("\n");
+          this.props.onChange(codeSegment);
         }}
         ref={this.editor}
       />
